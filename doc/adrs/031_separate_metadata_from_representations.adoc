@@ -1,0 +1,101 @@
+= ADR-031 - Separate metadata representations
+
+== Context
+
+Our representations contain two types of information, some of them are related to the content of the representation and other to its identity.
+When we are manipulating representations, for example to display them in the explorer, we need to manipulate properties related to their identity.
+When we are refreshing a representation, we are mostly updating properties related to its content.
+
+We will split those two set of properties into different objects.
+
+
+== Decision
+
+=== GraphQL API change
+
+The representation metadata will also appear in the GraphQL schema used by Sirius Components in order to be able to request only identity properties for a representation.
+For that, we will introduce an interface named `IRepresentationMetadata` with the following content in the schema:
+
+```
+interface RepresentationMetadata {
+  id: ID!
+  descriptionId: ID!
+  label: String!
+}
+```
+
+With this interface, we wil have various implementations (one for each representation) such as:
+
+```
+type DiagramMetadata implements RepresentationMetadata {
+  id: ID!
+  descriptionId: ID!
+  label: String
+  toolSections: [ToolSection!]!
+}
+```
+
+or
+
+```
+type FormMetadata implements RepresentationMetadata {
+  id: ID!
+  descriptionId: ID!
+  label: String
+}
+```
+
+Everytime a GraphQL API allowed to retrieve a representation except in the subscription (with the various refresh event payload), we will provide the metadata instead.
+As a result, the following fields will be modified:
+
+- EditingContext#representation
+- EditingContext#representations
+- CreateRepresentationSuccessPayload#representation
+- DeleteFromDiagramSuccessPayload#diagram
+- EditLabelSuccessPayload#diagram
+- InvokeNodeToolOnDiagramSuccessPayload#diagram
+- InvokeEdgeToolOnDiagramSuccessPayload#diagram
+
+Most of those fields are not very useful and they may be removed altogether from the GraphQL API.
+This change does not require any change in our Java data structure, it will just make it impossible with GraphQL to retrieve the content of a representation outside of its subscription.
+
+=== Representation change
+
+We will introduce a new concept named `IRepresentationMetadata` which will contain identity-related properties while the `IRepresentation` will keep the content.
+We will remove those properties from the various representations to move them to `IRepresentationMetada`:
+
+- id
+- descriptionId
+- label
+- kind
+
+We will also introduce the concept of `ISemanticRepresentationMetadata` in a similar fashion as the `ISemanticRepresentation` with the following properties:
+
+- targetObjectId
+
+The representations and their descriptions will be updated to remove those fields, which will include changes to:
+
+- Diagram
+- Tree
+- Selection
+- Form
+- Validation
+
+The various renderer will not have to handle those properties anymore.
+We will also be able to delete the `GetOrCreateRandomIdProvider` since we won't need those kind of behavior to keep a stable identifier.
+We will have the ability to remove `DiagramDescription.LABEL` too.
+
+To retrieve said representation metadata if we need it which is not sure in Sirius Components, we will probably add an `IRepresentationMetadataSearchService`.
+Implementation of the IRepresentationMetadata will be left to the description of the server using Sirius Component.
+The kind will be used to define the type of the representation metadata in the GraphQL API.
+This field will not appear in the GraphQL API.
+There won't be any DiagramMetadata or FormMetadata Java class in Sirius Components.
+
+== Status
+
+WIP
+
+== Consequences
+
+In Sirius Web, the RepresentationDescriptor will be able to implements `IRepresentationMetadata`.
+It will provide an improvement to the current situation by allowing us to store only once the identity-related properties.
