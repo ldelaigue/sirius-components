@@ -19,6 +19,7 @@ import static org.eclipse.sirius.web.forms.tests.FormAssertions.assertThat;
 import org.assertj.core.api.AbstractAssert;
 import org.eclipse.sirius.web.forms.AbstractWidget;
 import org.eclipse.sirius.web.forms.Checkbox;
+import org.eclipse.sirius.web.forms.Link;
 import org.eclipse.sirius.web.forms.List;
 import org.eclipse.sirius.web.forms.ListItem;
 import org.eclipse.sirius.web.forms.Radio;
@@ -77,6 +78,11 @@ public class WidgetAssert extends AbstractAssert<WidgetAssert, AbstractWidget> {
             Textfield textfield = (Textfield) widget;
             assertThat(actualTextfield.getLabel()).isEqualTo(textfield.getLabel());
             assertThat(actualTextfield.getValue()).isEqualTo(textfield.getValue());
+        } else if (this.actual instanceof Link && widget instanceof Link) {
+            Link actualLink = (Link) this.actual;
+            Link link = (Link) widget;
+            assertThat(actualLink.getLabel()).isEqualTo(link.getLabel());
+            assertThat(actualLink.getUrl()).isEqualTo(link.getUrl());
         }
 
         return this;

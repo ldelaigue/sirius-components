@@ -25,6 +25,7 @@ import java.io.IOException;
 
 import org.eclipse.sirius.web.forms.AbstractWidget;
 import org.eclipse.sirius.web.forms.Checkbox;
+import org.eclipse.sirius.web.forms.Link;
 import org.eclipse.sirius.web.forms.List;
 import org.eclipse.sirius.web.forms.Radio;
 import org.eclipse.sirius.web.forms.Select;
@@ -70,6 +71,8 @@ public class WidgetDeserializer extends StdDeserializer<AbstractWidget> {
                 nodeStyle = mapper.readValue(root.toString(), Textfield.class);
             } else if (List.class.getSimpleName().equals(typeName.asText())) {
                 nodeStyle = mapper.readValue(root.toString(), List.class);
+            } else if (Link.class.getSimpleName().equals(typeName.asText())) {
+                nodeStyle = mapper.readValue(root.toString(), Link.class);
             }
         }
         return nodeStyle;
