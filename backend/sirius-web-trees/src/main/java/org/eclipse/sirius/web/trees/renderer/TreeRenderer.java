@@ -45,7 +45,7 @@ public class TreeRenderer {
         String label = this.treeDescription.getLabelProvider().apply(this.variableManager);
 
         List<TreeItem> childrenItems = new ArrayList<>();
-        List<Object> rootElements = this.treeDescription.getElementsProvider().apply(this.variableManager);
+        List<?> rootElements = this.treeDescription.getElementsProvider().apply(this.variableManager);
         for (Object rootElement : rootElements) {
             VariableManager rootElementVariableManager = this.variableManager.createChild();
             rootElementVariableManager.put(VariableManager.SELF, rootElement);
@@ -71,7 +71,7 @@ public class TreeRenderer {
         String imageURL = this.treeDescription.getImageURLProvider().apply(treeItemVariableManager);
         Boolean hasChildren = this.treeDescription.getHasChildrenProvider().apply(treeItemVariableManager);
 
-        List<Object> children = this.treeDescription.getChildrenProvider().apply(treeItemVariableManager);
+        List<?> children = this.treeDescription.getChildrenProvider().apply(treeItemVariableManager);
         boolean expanded = !children.isEmpty();
         for (Object child : children) {
             VariableManager childVariableManager = treeItemVariableManager.createChild();

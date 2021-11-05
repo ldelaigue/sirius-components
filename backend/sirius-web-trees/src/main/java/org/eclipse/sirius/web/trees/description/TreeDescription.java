@@ -51,9 +51,9 @@ public final class TreeDescription implements IRepresentationDescription {
 
     private Function<VariableManager, String> imageURLProvider;
 
-    private Function<VariableManager, List<Object>> elementsProvider;
+    private Function<VariableManager, List<?>> elementsProvider;
 
-    private Function<VariableManager, List<Object>> childrenProvider;
+    private Function<VariableManager, List<?>> childrenProvider;
 
     private Function<VariableManager, Boolean> hasChildrenProvider;
 
@@ -102,11 +102,11 @@ public final class TreeDescription implements IRepresentationDescription {
         return this.imageURLProvider;
     }
 
-    public Function<VariableManager, List<Object>> getElementsProvider() {
+    public Function<VariableManager, List<?>> getElementsProvider() {
         return this.elementsProvider;
     }
 
-    public Function<VariableManager, List<Object>> getChildrenProvider() {
+    public Function<VariableManager, List<?>> getChildrenProvider() {
         return this.childrenProvider;
     }
 
@@ -152,9 +152,9 @@ public final class TreeDescription implements IRepresentationDescription {
 
         private Function<VariableManager, String> imageURLProvider;
 
-        private Function<VariableManager, List<Object>> elementsProvider;
+        private Function<VariableManager, List<?>> elementsProvider;
 
-        private Function<VariableManager, List<Object>> childrenProvider;
+        private Function<VariableManager, List<?>> childrenProvider;
 
         private Function<VariableManager, Boolean> hasChildrenProvider;
 
@@ -199,12 +199,12 @@ public final class TreeDescription implements IRepresentationDescription {
             return this;
         }
 
-        public Builder elementsProvider(Function<VariableManager, List<Object>> elementsProvider) {
+        public Builder elementsProvider(Function<VariableManager, List<?>> elementsProvider) {
             this.elementsProvider = Objects.requireNonNull(elementsProvider);
             return this;
         }
 
-        public Builder childrenProvider(Function<VariableManager, List<Object>> childrenProvider) {
+        public Builder childrenProvider(Function<VariableManager, List<?>> childrenProvider) {
             this.childrenProvider = Objects.requireNonNull(childrenProvider);
             return this;
         }
